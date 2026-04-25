@@ -136,25 +136,25 @@ Type `/` in the editor to trigger commands. [Extensions](#extensions) can regist
 
 | Command | Description |
 |---------|-------------|
-| `/login`, `/logout` | OAuth authentication |
-| `/model` | Switch models |
-| `/scoped-models` | Enable/disable models for Ctrl+P cycling |
-| `/settings` | Thinking level, theme, message delivery, transport |
-| `/resume` | Pick from previous sessions |
-| `/new` | Start a new session |
-| `/name <name>` | Set session display name |
-| `/session` | Show session info (file, ID, messages, tokens, cost) |
-| `/tree` | Jump to any point in the session and continue from there |
-| `/fork` | Create a new session from a previous user message |
-| `/clone` | Duplicate the current active branch into a new session |
-| `/compact [prompt]` | Manually compact context, optional custom instructions |
-| `/copy` | Copy last assistant message to clipboard |
-| `/export [file]` | Export session to HTML file |
-| `/share` | Upload as private GitHub gist with shareable HTML link |
-| `/reload` | Reload keybindings, extensions, skills, prompts, and context files (themes hot-reload automatically) |
-| `/hotkeys` | Show all keyboard shortcuts |
-| `/changelog` | Display version history |
-| `/quit` | Quit ego |
+| `/login`, `/logout` | 配置或移除 provider 认证 |
+| `/model` | 选择 model |
+| `/scoped-models` | 启用/禁用 Ctrl+P 循环切换的 models |
+| `/settings` | 打开设置菜单 |
+| `/resume` | 恢复另一个 session |
+| `/new` | 开始新 session |
+| `/name <name>` | 设置 session 显示名称 |
+| `/session` | 显示 session 信息和统计数据 |
+| `/tree` | 浏览 session tree（切换分支） |
+| `/fork` | 从之前的用户消息创建新 fork |
+| `/clone` | 在当前位置复制当前 session |
+| `/compact [prompt]` | 手动压缩 session 上下文，可附加自定义指令 |
+| `/copy` | 复制最后一条 agent 消息到剪贴板 |
+| `/export [file]` | 导出 session（默认 HTML，也可指定路径：.html/.jsonl） |
+| `/share` | 将 session 分享为 GitHub secret gist |
+| `/reload` | 重新加载 keybindings、extensions、skills、prompts 和 themes |
+| `/hotkeys` | 显示所有键盘快捷键 |
+| `/changelog` | 显示 changelog 条目 |
+| `/quit` | 退出 ego |
 
 ### Keyboard Shortcuts
 
