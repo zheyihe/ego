@@ -7,10 +7,10 @@
  * createAgentSession() applies that cwd when it builds the actual built-in tools.
  *
  * For custom tools, see 06-extensions.ts - custom tools are registered via the
- * extensions system using pi.registerTool().
+ * extensions system using ego.registerTool().
  */
 
-import { createAgentSession, SessionManager } from "@mariozechner/pi-coding-agent";
+import { createAgentSession, SessionManager } from "@zheyihe/ego-coding-agent";
 
 // Read-only mode (no edit/write)
 await createAgentSession({

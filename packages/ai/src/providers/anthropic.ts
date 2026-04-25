@@ -38,13 +38,13 @@ import { transformMessages } from "./transform-messages.js";
 
 /**
  * Resolve cache retention preference.
- * Defaults to "short" and uses PI_CACHE_RETENTION for backward compatibility.
+ * Defaults to "short" and uses EGO_CACHE_RETENTION for backward compatibility.
  */
 function resolveCacheRetention(cacheRetention?: CacheRetention): CacheRetention {
 	if (cacheRetention) {
 		return cacheRetention;
 	}
-	if (typeof process !== "undefined" && process.env.PI_CACHE_RETENTION === "long") {
+	if (typeof process !== "undefined" && process.env.EGO_CACHE_RETENTION === "long") {
 		return "long";
 	}
 	return "short";
@@ -70,7 +70,7 @@ const claudeCodeVersion = "2.1.75";
 
 // Claude Code 2.x tool names (canonical casing)
 // Source: https://cchistory.mariozechner.at/data/prompts-2.1.11.md
-// To update: https://github.com/badlogic/cchistory
+// To update: cchistory.
 const claudeCodeTools = [
 	"Read",
 	"Write",

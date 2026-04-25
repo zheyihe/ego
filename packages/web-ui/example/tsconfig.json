@@ -6,10 +6,12 @@
 		"moduleResolution": "bundler",
 		"paths": {
 			"*": ["./*"],
-			"@mariozechner/pi-agent-core": ["../../agent/dist/index.d.ts"],
-			"@mariozechner/pi-ai": ["../../ai/dist/index.d.ts"],
-			"@mariozechner/pi-tui": ["../../tui/dist/index.d.ts"],
-			"@mariozechner/pi-web-ui": ["../dist/index.d.ts"]
+			"@zheyihe/ego-agent-core": ["../../agent/src/index.ts"],
+			"@zheyihe/ego-ai": ["../../ai/src/index.ts"],
+			"@zheyihe/ego-ai/*": ["../../ai/src/*", "../../ai/src/providers/*"],
+			"@zheyihe/ego-tui": ["../../tui/src/index.ts"],
+			"@zheyihe/ego-web-ui": ["../src/index.ts"],
+			"@zheyihe/ego-web-ui/*": ["../src/*"]
 		},
 		"strict": true,
 		"skipLibCheck": true,

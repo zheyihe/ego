@@ -1,4 +1,4 @@
-# Contributing to pi
+# Contributing to ego
 
 This guide exists to save both sides time.
 
@@ -8,7 +8,7 @@ This guide exists to save both sides time.
 
 Using AI to write code is fine. Submitting AI-generated slop without understanding it is not.
 
-If you use an agent, run it from the `pi-mono` root directory so it picks up `AGENTS.md` automatically. Your agent must follow the rules and guidelines in that file.
+If you use an agent, run it from the `ego` root directory so it picks up `AGENTS.md` automatically. Your agent must follow the rules and guidelines in that file.
 
 ## Contribution Gate
 
@@ -64,7 +64,7 @@ If you are adding a new provider to `packages/ai`, see `AGENTS.md` for required 
 
 ## Philosophy
 
-pi's core is minimal. If your feature does not belong in the core, it should be an extension. PRs that bloat the core will likely be rejected.
+ego's core is minimal. If your feature does not belong in the core, it should be an extension. PRs that bloat the core will likely be rejected.
 
 ## Questions?
 

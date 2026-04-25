@@ -19,12 +19,10 @@ afterEach(() => {
 describe("detectInstallMethod", () => {
 	test("detects pnpm from Windows .pnpm install paths", () => {
 		setExecPath(
-			"C:\\Users\\Admin\\Documents\\pnpm-repository\\global\\5\\.pnpm\\@mariozechner+pi-coding-agent@0.67.68\\node_modules\\@mariozechner\\pi-coding-agent\\dist\\cli.js",
+			"C:\\Users\\Admin\\Documents\\pnpm-repository\\global\\5\\.pnpm\\@mariozechner+ego-coding-agent@0.67.68\\node_modules\\@mariozechner\\ego-coding-agent\\dist\\cli.js",
 		);
 
 		expect(detectInstallMethod()).toBe("pnpm");
-		expect(getUpdateInstruction("@mariozechner/pi-coding-agent")).toBe(
-			"Run: pnpm install -g @mariozechner/pi-coding-agent",
-		);
+		expect(getUpdateInstruction("@zheyihe/ego-coding-agent")).toBe("Run: pnpm install -g @zheyihe/ego-coding-agent");
 	});
 });

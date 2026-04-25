@@ -12,8 +12,8 @@ import type {
 	Api,
 	AssistantMessage,
 	Context,
+	ThinkingLevel as EgoThinkingLevel,
 	Model,
-	ThinkingLevel as PiThinkingLevel,
 	SimpleStreamOptions,
 	StreamFunction,
 	StreamOptions,
@@ -482,7 +482,7 @@ function buildParams(
 	return params;
 }
 
-type ClampedThinkingLevel = Exclude<PiThinkingLevel, "xhigh">;
+type ClampedThinkingLevel = Exclude<EgoThinkingLevel, "xhigh">;
 
 function isGemini3ProModel(model: Model<"google-generative-ai">): boolean {
 	return /gemini-3(?:\.\d+)?-pro/.test(model.id.toLowerCase());
@@ -495,7 +495,7 @@ function isGemini3FlashModel(model: Model<"google-generative-ai">): boolean {
 function getDisabledThinkingConfig(model: Model<"google-vertex">): ThinkingConfig {
 	// Google docs: Gemini 3.1 Pro cannot disable thinking, and Gemini 3 Flash / Flash-Lite
 	// do not support full thinking-off either. For Gemini 3 models, use the lowest supported
-	// thinkingLevel without includeThoughts so hidden thinking remains invisible to pi.
+	// thinkingLevel without includeThoughts so hidden thinking remains invisible to ego.
 	const geminiModel = model as unknown as Model<"google-generative-ai">;
 	if (isGemini3ProModel(geminiModel)) {
 		return { thinkingLevel: ThinkingLevel.LOW };

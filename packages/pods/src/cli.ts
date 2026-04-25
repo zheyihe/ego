@@ -16,41 +16,41 @@ const __dirname = dirname(__filename);
 const packageJson = JSON.parse(readFileSync(join(__dirname, "../package.json"), "utf-8"));
 
 function printHelp() {
-	console.log(`pi v${packageJson.version} - Manage vLLM deployments on GPU pods
+	console.log(`ego v${packageJson.version} - Manage vLLM deployments on GPU pods
 
 Pod Management:
-  pi pods setup <name> "<ssh>" --mount "<mount>"    Setup pod with mount command
+  ego pods setup <name> "<ssh>" --mount "<mount>"    Setup pod with mount command
     Options:
       --vllm release    Install latest vLLM release >=0.10.0 (default)
       --vllm nightly    Install vLLM nightly build (latest features)
       --vllm gpt-oss    Install vLLM 0.10.1+gptoss with PyTorch nightly (GPT-OSS only)
-  pi pods                                           List all pods (* = active)
-  pi pods active <name>                             Switch active pod
-  pi pods remove <name>                             Remove pod from local config
-  pi shell [<name>]                                 Open shell on pod (active or specified)
-  pi ssh [<name>] "<command>"                       Run SSH command on pod
+  ego pods                                           List all pods (* = active)
+  ego pods active <name>                             Switch active pod
+  ego pods remove <name>                             Remove pod from local config
+  ego shell [<name>]                                 Open shell on pod (active or specified)
+  ego ssh [<name>] "<command>"                       Run SSH command on pod
 
 Model Management:
-  pi start <model> --name <name> [options]          Start a model
+  ego start <model> --name <name> [options]          Start a model
     --memory <percent>   GPU memory allocation (30%, 50%, 90%)
     --context <size>     Context window (4k, 8k, 16k, 32k, 64k, 128k)
     --gpus <count>       Number of GPUs to use (predefined models only)
     --vllm <args...>     Pass remaining args to vLLM (ignores other options)
-  pi stop [<name>]                                  Stop model (or all if no name)
-  pi list                                           List running models
-  pi logs <name>                                    Stream model logs
-  pi agent <name> ["<message>"...] [options]        Chat with model using agent & tools
-  pi agent <name> [options]                         Interactive chat mode
+  ego stop [<name>]                                  Stop model (or all if no name)
+  ego list                                           List running models
+  ego logs <name>                                    Stream model logs
+  ego agent <name> ["<message>"...] [options]        Chat with model using agent & tools
+  ego agent <name> [options]                         Interactive chat mode
     --continue, -c       Continue previous session
     --json              Output as JSONL
-    (All pi-agent options are supported)
+    (All ego-agent options are supported)
 
   All model commands support --pod <name> to override the active pod.
 
 Environment:
   HF_TOKEN         HuggingFace token for model downloads
-  PI_API_KEY     API key for vLLM endpoints
-  PI_CONFIG_DIR    Config directory (default: ~/.pi)`);
+  EGO_API_KEY     API key for vLLM endpoints
+  EGO_CONFIG_DIR    Config directory (default: ~/.ego)`);
 }
 
 // Parse command line arguments
@@ -71,19 +71,19 @@ const subcommand = args[1];
 
 // Main command handler
 try {
-	// Handle "pi pods" commands
+	// Handle "ego pods" commands
 	if (command === "pods") {
 		if (!subcommand) {
-			// pi pods - list all pods
+			// ego pods - list all pods
 			listPods();
 		} else if (subcommand === "setup") {
-			// pi pods setup <name> "<ssh>" [--mount "<mount>"] [--models-path <path>] [--vllm release|nightly|gpt-oss]
+			// ego pods setup <name> "<ssh>" [--mount "<mount>"] [--models-path <path>] [--vllm release|nightly|gpt-oss]
 			const name = args[2];
 			const sshCmd = args[3];
 
 			if (!name || !sshCmd) {
 				console.error(
-					'Usage: pi pods setup <name> "<ssh>" [--mount "<mount>"] [--models-path <path>] [--vllm release|nightly|gpt-oss]',
+					'Usage: ego pods setup <name> "<ssh>" [--mount "<mount>"] [--models-path <path>] [--vllm release|nightly|gpt-oss]',
 				);
 				process.exit(1);
 			}
@@ -122,18 +122,18 @@ try {
 
 			await setupPod(name, sshCmd, options);
 		} else if (subcommand === "active") {
-			// pi pods active <name>
+			// ego pods active <name>
 			const name = args[2];
 			if (!name) {
-				console.error("Usage: pi pods active <name>");
+				console.error("Usage: ego pods active <name>");
 				process.exit(1);
 			}
 			switchActivePod(name);
 		} else if (subcommand === "remove") {
-			// pi pods remove <name>
+			// ego pods remove <name>
 			const name = args[2];
 			if (!name) {
-				console.error("Usage: pi pods remove <name>");
+				console.error("Usage: ego pods remove <name>");
 				process.exit(1);
 			}
 			removePodCommand(name);
@@ -154,7 +154,7 @@ try {
 		// Handle SSH/shell commands and model commands
 		switch (command) {
 			case "shell": {
-				// pi shell [<name>] - open interactive shell
+				// ego shell [<name>] - open interactive shell
 				const podName = args[1];
 				let podInfo: { name: string; pod: import("./types.js").Pod } | null = null;
 
@@ -172,7 +172,7 @@ try {
 					if (podName) {
 						console.error(chalk.red(`Pod '${podName}' not found`));
 					} else {
-						console.error(chalk.red("No active pod. Use 'pi pods active <name>' to set one."));
+						console.error(chalk.red("No active pod. Use 'ego pods active <name>' to set one."));
 					}
 					process.exit(1);
 				}
@@ -192,19 +192,19 @@ try {
 				break;
 			}
 			case "ssh": {
-				// pi ssh [<name>] "<command>" - run command via SSH
+				// ego ssh [<name>] "<command>" - run command via SSH
 				let podName: string | undefined;
 				let sshCommand: string;
 
 				if (args.length === 2) {
-					// pi ssh "<command>" - use active pod
+					// ego ssh "<command>" - use active pod
 					sshCommand = args[1];
 				} else if (args.length === 3) {
-					// pi ssh <name> "<command>"
+					// ego ssh <name> "<command>"
 					podName = args[1];
 					sshCommand = args[2];
 				} else {
-					console.error('Usage: pi ssh [<name>] "<command>"');
+					console.error('Usage: ego ssh [<name>] "<command>"');
 					process.exit(1);
 				}
 
@@ -224,7 +224,7 @@ try {
 					if (podName) {
 						console.error(chalk.red(`Pod '${podName}' not found`));
 					} else {
-						console.error(chalk.red("No active pod. Use 'pi pods active <name>' to set one."));
+						console.error(chalk.red("No active pod. Use 'ego pods active <name>' to set one."));
 					}
 					process.exit(1);
 				}
@@ -237,7 +237,7 @@ try {
 				break;
 			}
 			case "start": {
-				// pi start <model> --name <name> [options]
+				// ego start <model> --name <name> [options]
 				const modelId = args[1];
 				if (!modelId) {
 					// Show available models
@@ -301,7 +301,7 @@ try {
 				break;
 			}
 			case "stop": {
-				// pi stop [name] - stop specific model or all models
+				// ego stop [name] - stop specific model or all models
 				const name = args[1];
 				if (!name) {
 					// Stop all models on the active pod
@@ -312,28 +312,28 @@ try {
 				break;
 			}
 			case "list":
-				// pi list
+				// ego list
 				await listModels({ pod: podOverride });
 				break;
 			case "logs": {
-				// pi logs <name>
+				// ego logs <name>
 				const name = args[1];
 				if (!name) {
-					console.error("Usage: pi logs <name>");
+					console.error("Usage: ego logs <name>");
 					process.exit(1);
 				}
 				await viewLogs(name, { pod: podOverride });
 				break;
 			}
 			case "agent": {
-				// pi agent <name> [messages...] [options]
+				// ego agent <name> [messages...] [options]
 				const name = args[1];
 				if (!name) {
-					console.error("Usage: pi agent <name> [messages...] [options]");
+					console.error("Usage: ego agent <name> [messages...] [options]");
 					process.exit(1);
 				}
 
-				const apiKey = process.env.PI_API_KEY;
+				const apiKey = process.env.EGO_API_KEY;
 
 				// Pass all args after the model name
 				const agentArgs = args.slice(2);

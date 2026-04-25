@@ -5,9 +5,9 @@
  * a summary of the branch being left so context isn't lost.
  */
 
-import type { AgentMessage } from "@mariozechner/pi-agent-core";
-import type { Model } from "@mariozechner/pi-ai";
-import { completeSimple } from "@mariozechner/pi-ai";
+import type { AgentMessage } from "@zheyihe/ego-agent-core";
+import type { Model } from "@zheyihe/ego-ai";
+import { completeSimple } from "@zheyihe/ego-ai";
 import {
 	convertToLlm,
 	createBranchSummaryMessage,
@@ -189,7 +189,7 @@ export function prepareBranchEntries(entries: SessionEntry[], tokenBudget: numbe
 
 	// First pass: collect file ops from ALL entries (even if they don't fit in token budget)
 	// This ensures we capture cumulative file tracking from nested branch summaries
-	// Only extract from pi-generated summaries (fromHook !== true), not extension-generated ones
+	// Only extract from ego-generated summaries (fromHook !== true), not extension-generated ones
 	for (const entry of entries) {
 		if (entry.type === "branch_summary" && !entry.fromHook && entry.details) {
 			const details = entry.details as BranchSummaryDetails;

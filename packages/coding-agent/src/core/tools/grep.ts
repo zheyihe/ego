@@ -1,6 +1,6 @@
 import { createInterface } from "node:readline";
-import type { AgentTool } from "@mariozechner/pi-agent-core";
-import { Text } from "@mariozechner/pi-tui";
+import type { AgentTool } from "@zheyihe/ego-agent-core";
+import { Text } from "@zheyihe/ego-tui";
 import { spawn } from "child_process";
 import { readFileSync, statSync } from "fs";
 import path from "path";

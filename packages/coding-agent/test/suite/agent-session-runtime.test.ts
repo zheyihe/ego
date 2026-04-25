@@ -1,7 +1,7 @@
 import { existsSync, mkdirSync, realpathSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { fauxAssistantMessage, registerFauxProvider } from "@mariozechner/pi-ai";
+import { fauxAssistantMessage, registerFauxProvider } from "@zheyihe/ego-ai";
 import { afterEach, describe, expect, it } from "vitest";
 import {
 	type CreateAgentSessionRuntimeFactory,
@@ -40,7 +40,7 @@ describe("AgentSessionRuntime characterization", () => {
 		options?: { cwd?: string; bootstrapModel?: boolean; bootstrapThinkingLevel?: boolean },
 	) {
 		const tempDir =
-			options?.cwd ?? join(tmpdir(), `pi-runtime-suite-${Date.now()}-${Math.random().toString(36).slice(2)}`);
+			options?.cwd ?? join(tmpdir(), `ego-runtime-suite-${Date.now()}-${Math.random().toString(36).slice(2)}`);
 		mkdirSync(tempDir, { recursive: true });
 
 		const faux = registerFauxProvider({
@@ -61,8 +61,8 @@ describe("AgentSessionRuntime characterization", () => {
 			thinkingLevel: options?.bootstrapThinkingLevel === false ? undefined : undefined,
 			resourceLoaderOptions: {
 				extensionFactories: [
-					(pi: ExtensionAPI) => {
-						pi.registerProvider(faux.getModel().provider, {
+					(ego: ExtensionAPI) => {
+						ego.registerProvider(faux.getModel().provider, {
 							baseUrl: faux.getModel().baseUrl,
 							apiKey: "faux-key",
 							api: faux.api,
@@ -77,7 +77,7 @@ describe("AgentSessionRuntime characterization", () => {
 								maxTokens: registeredModel.maxTokens,
 							})),
 						});
-						extensionFactory(pi);
+						extensionFactory(ego);
 					},
 				],
 				noSkills: true,
@@ -122,14 +122,14 @@ describe("AgentSessionRuntime characterization", () => {
 
 	it("emits session_before_switch and session_start for new and resume flows", async () => {
 		const events: RecordedSessionEvent[] = [];
-		const { runtime } = await createRuntimeForTest((pi: ExtensionAPI) => {
-			pi.on("session_before_switch", (event) => {
+		const { runtime } = await createRuntimeForTest((ego: ExtensionAPI) => {
+			ego.on("session_before_switch", (event) => {
 				events.push(event);
 			});
-			pi.on("session_shutdown", (event) => {
+			ego.on("session_shutdown", (event) => {
 				events.push(event);
 			});
-			pi.on("session_start", (event) => {
+			ego.on("session_start", (event) => {
 				events.push(event);
 			});
 		});
@@ -168,14 +168,14 @@ describe("AgentSessionRuntime characterization", () => {
 	it("honors session_before_switch cancellation for new and resume", async () => {
 		const events: RecordedSessionEvent[] = [];
 		let cancelReason: "new" | "resume" | undefined;
-		const { runtime } = await createRuntimeForTest((pi: ExtensionAPI) => {
-			pi.on("session_before_switch", (event) => {
+		const { runtime } = await createRuntimeForTest((ego: ExtensionAPI) => {
+			ego.on("session_before_switch", (event) => {
 				events.push(event);
 				if (event.reason === cancelReason) {
 					return { cancel: true };
 				}
 			});
-			pi.on("session_start", (event) => {
+			ego.on("session_start", (event) => {
 				events.push(event);
 			});
 		});
@@ -189,7 +189,7 @@ describe("AgentSessionRuntime characterization", () => {
 		expect(runtime.session.sessionFile).toBe(originalSessionFile);
 
 		events.length = 0;
-		const otherDir = join(tmpdir(), `pi-runtime-other-${Date.now()}-${Math.random().toString(36).slice(2)}`);
+		const otherDir = join(tmpdir(), `ego-runtime-other-${Date.now()}-${Math.random().toString(36).slice(2)}`);
 		mkdirSync(otherDir, { recursive: true });
 		const otherSession = SessionManager.create(otherDir);
 		otherSession.appendMessage({ role: "user", content: [{ type: "text", text: "other" }], timestamp: Date.now() });
@@ -203,18 +203,18 @@ describe("AgentSessionRuntime characterization", () => {
 	it("emits session_before_fork and session_start and honors cancellation", async () => {
 		const events: RecordedSessionEvent[] = [];
 		let cancelNextFork = false;
-		const { runtime } = await createRuntimeForTest((pi: ExtensionAPI) => {
-			pi.on("session_before_fork", (event) => {
+		const { runtime } = await createRuntimeForTest((ego: ExtensionAPI) => {
+			ego.on("session_before_fork", (event) => {
 				events.push(event);
 				if (cancelNextFork) {
 					cancelNextFork = false;
 					return { cancel: true };
 				}
 			});
-			pi.on("session_shutdown", (event) => {
+			ego.on("session_shutdown", (event) => {
 				events.push(event);
 			});
-			pi.on("session_start", (event) => {
+			ego.on("session_start", (event) => {
 				events.push(event);
 			});
 		});
@@ -288,7 +288,10 @@ describe("AgentSessionRuntime characterization", () => {
 	});
 
 	it("duplicates the current active branch in-memory when forking at the current position", async () => {
-		const tempDir = join(tmpdir(), `pi-runtime-suite-in-memory-${Date.now()}-${Math.random().toString(36).slice(2)}`);
+		const tempDir = join(
+			tmpdir(),
+			`ego-runtime-suite-in-memory-${Date.now()}-${Math.random().toString(36).slice(2)}`,
+		);
 		mkdirSync(tempDir, { recursive: true });
 
 		const faux = registerFauxProvider({
@@ -308,8 +311,8 @@ describe("AgentSessionRuntime characterization", () => {
 			model: faux.getModel(),
 			resourceLoaderOptions: {
 				extensionFactories: [
-					(pi: ExtensionAPI) => {
-						pi.registerProvider(faux.getModel().provider, {
+					(ego: ExtensionAPI) => {
+						ego.registerProvider(faux.getModel().provider, {
 							baseUrl: faux.getModel().baseUrl,
 							apiKey: "faux-key",
 							api: faux.api,
@@ -405,8 +408,8 @@ describe("AgentSessionRuntime characterization", () => {
 	});
 
 	it("updates the runtime session cwd on cross-cwd session replacement", async () => {
-		const firstDir = join(tmpdir(), `pi-runtime-cwd-a-${Date.now()}-${Math.random().toString(36).slice(2)}`);
-		const secondDir = join(tmpdir(), `pi-runtime-cwd-b-${Date.now()}-${Math.random().toString(36).slice(2)}`);
+		const firstDir = join(tmpdir(), `ego-runtime-cwd-a-${Date.now()}-${Math.random().toString(36).slice(2)}`);
+		const secondDir = join(tmpdir(), `ego-runtime-cwd-b-${Date.now()}-${Math.random().toString(36).slice(2)}`);
 		mkdirSync(firstDir, { recursive: true });
 		mkdirSync(secondDir, { recursive: true });
 		const { runtime, faux, tempDir } = await createRuntimeForTest(() => {}, { cwd: firstDir });
@@ -417,8 +420,8 @@ describe("AgentSessionRuntime characterization", () => {
 			authStorage: otherAuthStorage,
 			resourceLoaderOptions: {
 				extensionFactories: [
-					(pi: ExtensionAPI) => {
-						pi.registerProvider(faux.getModel().provider, {
+					(ego: ExtensionAPI) => {
+						ego.registerProvider(faux.getModel().provider, {
 							baseUrl: faux.getModel().baseUrl,
 							apiKey: "faux-key",
 							api: faux.api,
@@ -490,8 +493,8 @@ describe("AgentSessionRuntime characterization", () => {
 			authStorage: otherAuthStorage,
 			resourceLoaderOptions: {
 				extensionFactories: [
-					(pi: ExtensionAPI) => {
-						pi.registerProvider(faux.getModel().provider, {
+					(ego: ExtensionAPI) => {
+						ego.registerProvider(faux.getModel().provider, {
 							baseUrl: faux.getModel().baseUrl,
 							apiKey: "faux-key",
 							api: faux.api,

@@ -10,13 +10,13 @@
 
 ### Fixed
 
-- Fixed Mom event-directory `fs.watch` error handling to retry after transient watcher failures such as `EMFILE`, avoiding startup crashes ([#3564](https://github.com/badlogic/pi-mono/issues/3564))
+- Fixed Mom event-directory `fs.watch` error handling to retry after transient watcher failures such as `EMFILE`, avoiding startup crashes ([#3564](https://github.com/zheyihe/ego/issues/3564))
 
 ## [0.69.0] - 2026-04-22
 
 ### Breaking Changes
 
-- Migrated Mom's TypeBox-based tool examples and runtime dependency from `@sinclair/typebox` 0.34.x to `typebox` 1.x. Install and import from `typebox` instead of `@sinclair/typebox` when authoring Mom tools and integrations ([#3112](https://github.com/badlogic/pi-mono/issues/3112))
+- Migrated Mom's TypeBox-based tool examples and runtime dependency from `@sinclair/typebox` 0.34.x to `typebox` 1.x. Install and import from `typebox` instead of `@sinclair/typebox` when authoring Mom tools and integrations ([#3112](https://github.com/zheyihe/ego/issues/3112))
 
 ## [0.68.1] - 2026-04-22
 
@@ -58,7 +58,7 @@
 
 ### Fixed
 
-- Fixed Mom compaction status handling to follow the unified `compaction_start` and `compaction_end` session events, keeping compaction notifications working after the event rename ([#2617](https://github.com/badlogic/pi-mono/issues/2617))
+- Fixed Mom compaction status handling to follow the unified `compaction_start` and `compaction_end` session events, keeping compaction notifications working after the event rename ([#2617](https://github.com/zheyihe/ego/issues/2617))
 
 ## [0.63.0] - 2026-03-27
 
@@ -98,7 +98,7 @@
 
 ### Fixed
 
-- Fixed mom startup crash caused by settings API drift by using `SettingsManager` with workspace-backed storage ([#1444](https://github.com/badlogic/pi-mono/issues/1444))
+- Fixed mom startup crash caused by settings API drift by using `SettingsManager` with workspace-backed storage ([#1444](https://github.com/zheyihe/ego/issues/1444))
 
 ## [0.55.3] - 2026-02-27
 
@@ -214,7 +214,7 @@
 
 ### Fixed
 
-- Use coding-agent's SessionManager instead of custom MomSessionManager to fix API mismatch crash ([#595](https://github.com/badlogic/pi-mono/issues/595))
+- Use coding-agent's SessionManager instead of custom MomSessionManager to fix API mismatch crash ([#595](https://github.com/zheyihe/ego/issues/595))
 
 ## [0.42.4] - 2026-01-10
 
@@ -282,7 +282,7 @@
 
 ### Breaking Changes
 
-- `AgentTool` import moved from `@mariozechner/pi-ai` to `@mariozechner/pi-agent-core`
+- `AgentTool` import moved from `@zheyihe/ego-ai` to `@zheyihe/ego-agent-core`
 - `AppMessage` type renamed to `AgentMessage`
 - `Attachment` type replaced with `ImageContent` for image handling
 - `MomSessionManager.loadSession()` renamed to `buildSessionContex()`
@@ -300,7 +300,7 @@
 
 ### Added
 
-- Support for OAuth login via coding agent's `/login` command (link `~/.pi/agent/auth.json` to `~/.pi/mom/auth.json`)
+- Support for OAuth login via coding agent's `/login` command (link `~/.ego/agent/auth.json` to `~/.ego/mom/auth.json`)
 
 ## [0.20.2] - 2025-12-13
 

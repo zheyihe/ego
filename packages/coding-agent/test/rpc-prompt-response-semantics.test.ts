@@ -1,14 +1,8 @@
 import { existsSync, mkdirSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { Agent } from "@mariozechner/pi-agent-core";
-import {
-	type AssistantMessage,
-	type AssistantMessageEvent,
-	EventStream,
-	getModel,
-	type Model,
-} from "@mariozechner/pi-ai";
+import { Agent } from "@zheyihe/ego-agent-core";
+import { type AssistantMessage, type AssistantMessageEvent, EventStream, getModel, type Model } from "@zheyihe/ego-ai";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { AgentSession } from "../src/core/agent-session.js";
 import type { AgentSessionRuntime } from "../src/core/agent-session-runtime.js";
@@ -97,7 +91,7 @@ function createRuntimeHost(options: { withAuth: boolean; responseDelayMs: number
 	runtimeHost: AgentSessionRuntime;
 	cleanup: () => Promise<void>;
 } {
-	const tempDir = join(tmpdir(), `pi-rpc-prompt-${Date.now()}-${Math.random().toString(36).slice(2)}`);
+	const tempDir = join(tmpdir(), `ego-rpc-prompt-${Date.now()}-${Math.random().toString(36).slice(2)}`);
 	mkdirSync(tempDir, { recursive: true });
 
 	const model = options.model ?? getModel("anthropic", "claude-sonnet-4-5");

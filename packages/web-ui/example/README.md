@@ -1,6 +1,6 @@
-# Pi Web UI - Example
+# Ego Web UI - Example
 
-This is a minimal example showing how to use `@mariozechner/pi-web-ui` in a web application.
+This is a minimal example showing how to use `@zheyihe/ego-web-ui` in a web application.
 
 ## Setup
 
@@ -56,6 +56,6 @@ example/
 
 ## Learn More
 
-- [Pi Web UI Documentation](../README.md)
-- [Pi AI Documentation](../../ai/README.md)
-- [Mini Lit Documentation](https://github.com/badlogic/mini-lit)
+- [Ego Web UI Documentation](../README.md)
+- [Ego AI Documentation](../../ai/README.md)
+- Mini Lit Documentation

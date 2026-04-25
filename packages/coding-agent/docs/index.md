@@ -1,24 +1,24 @@
-# Pi Documentation
+# Ego Documentation
 
-Pi is a minimal terminal coding harness. It is designed to stay small at the core while being extended through TypeScript extensions, skills, prompt templates, themes, and pi packages.
+Ego is a minimal terminal coding harness. It is designed to stay small at the core while being extended through TypeScript extensions, skills, prompt templates, themes, and ego packages.
 
 ## Quick start
 
-Install pi with npm:
+Install ego with npm:
 
 ```bash
-npm install -g @mariozechner/pi-coding-agent
+npm install -g @zheyihe/ego-coding-agent
 ```
 
 And run it:
 
 ```bash
-pi
+ego
 ```
 
-Authenticate with `/login` for subscription providers, or set an API key such as `ANTHROPIC_API_KEY` before starting pi.
+Authenticate with `/login` for subscription providers, or set an API key such as `ANTHROPIC_API_KEY` before starting ego.
 
-Once you are signed in, you can ask pi about itself and it will answer you.  No
+Once you are signed in, you can ask ego about itself and it will answer you.  No
 need to read the docs yourself ;-)
 
 ## Start here
@@ -36,13 +36,13 @@ need to read the docs yourself ;-)
 - [Skills](skills.md) - Agent Skills for reusable on-demand capabilities.
 - [Prompt templates](prompt-templates.md) - reusable prompts that expand from slash commands.
 - [Themes](themes.md) - built-in and custom terminal themes.
-- [Pi packages](packages.md) - bundle and share extensions, skills, prompts, and themes.
+- [Ego packages](packages.md) - bundle and share extensions, skills, prompts, and themes.
 - [Custom models](models.md) - add model entries for supported provider APIs.
 - [Custom providers](custom-provider.md) - implement custom APIs and OAuth flows.
 
 ## Programmatic usage
 
-- [SDK](sdk.md) - embed pi in Node.js applications.
+- [SDK](sdk.md) - embed ego in Node.js applications.
 - [RPC mode](rpc.md) - integrate over stdin/stdout JSONL.
 - [JSON event stream mode](json.md) - print mode with structured events.
 - [TUI components](tui.md) - build custom terminal UI for extensions.

@@ -1,10 +1,10 @@
-> pi can create TUI components. Ask it to build one for your use case.
+> ego can create TUI components. Ask it to build one for your use case.
 
 # TUI Components
 
 Extensions and custom tools can render custom TUI components for interactive user interfaces. This page covers the component system and available building blocks.
 
-**Source:** [`@mariozechner/pi-tui`](https://github.com/badlogic/pi-mono/tree/main/packages/tui)
+**Source:** [`@zheyihe/ego-tui`](https://github.com/zheyihe/ego/tree/main/packages/tui)
 
 ## Component Interface
 
@@ -33,7 +33,7 @@ The TUI appends a full SGR reset and OSC 8 reset at the end of each rendered lin
 Components that display a text cursor and need IME (Input Method Editor) support should implement the `Focusable` interface:
 
 ```typescript
-import { CURSOR_MARKER, type Component, type Focusable } from "@mariozechner/pi-tui";
+import { CURSOR_MARKER, type Component, type Focusable } from "@zheyihe/ego-tui";
 
 class MyInput implements Component, Focusable {
   focused: boolean = false;  // Set by TUI when focus changes
@@ -59,7 +59,7 @@ This enables IME candidate windows to appear at the correct position for CJK inp
 When a container component (dialog, selector, etc.) contains an `Input` or `Editor` child, the container must implement `Focusable` and propagate the focus state to the child. Otherwise, the hardware cursor won't be positioned correctly for IME input.
 
 ```typescript
-import { Container, type Focusable, Input } from "@mariozechner/pi-tui";
+import { Container, type Focusable, Input } from "@zheyihe/ego-tui";
 
 class SearchDialog extends Container implements Focusable {
   private searchInput: Input;
@@ -89,18 +89,18 @@ Without this propagation, typing with an IME (Chinese, Japanese, Korean, etc.) w
 **In extensions** via `ctx.ui.custom()`:
 
 ```typescript
-pi.on("session_start", async (_event, ctx) => {
+ego.on("session_start", async (_event, ctx) => {
   const handle = ctx.ui.custom(myComponent);
   // handle.requestRender() - trigger re-render
   // handle.close() - restore normal UI
 });
 ```
 
-**In custom tools** via `pi.ui.custom()`:
+**In custom tools** via `ego.ui.custom()`:
 
 ```typescript
 async execute(toolCallId, params, onUpdate, ctx, signal) {
-  const handle = pi.ui.custom(myComponent);
+  const handle = ego.ui.custom(myComponent);
   // ...
   handle.close();
 }
@@ -179,10 +179,10 @@ See [overlay-qa-tests.ts](../examples/extensions/overlay-qa-tests.ts) for compre
 
 ## Built-in Components
 
-Import from `@mariozechner/pi-tui`:
+Import from `@zheyihe/ego-tui`:
 
 ```typescript
-import { Text, Box, Container, Spacer, Markdown } from "@mariozechner/pi-tui";
+import { Text, Box, Container, Spacer, Markdown } from "@zheyihe/ego-tui";
 ```
 
 ### Text
@@ -264,7 +264,7 @@ const image = new Image(
 Use `matchesKey()` for key detection:
 
 ```typescript
-import { matchesKey, Key } from "@mariozechner/pi-tui";
+import { matchesKey, Key } from "@zheyihe/ego-tui";
 
 handleInput(data: string) {
   if (matchesKey(data, Key.up)) {
@@ -290,7 +290,7 @@ handleInput(data: string) {
 **Critical:** Each line from `render()` must not exceed the `width` parameter.
 
 ```typescript
-import { visibleWidth, truncateToWidth } from "@mariozechner/pi-tui";
+import { visibleWidth, truncateToWidth } from "@zheyihe/ego-tui";
 
 render(width: number): string[] {
   // Truncate long lines
@@ -311,7 +311,7 @@ Example: Interactive selector
 import {
   matchesKey, Key,
   truncateToWidth, visibleWidth
-} from "@mariozechner/pi-tui";
+} from "@zheyihe/ego-tui";
 
 class MySelector {
   private items: string[];
@@ -363,7 +363,7 @@ class MySelector {
 Usage in an extension:
 
 ```typescript
-pi.registerCommand("pick", {
+ego.registerCommand("pick", {
   description: "Pick an item",
   handler: async (args, ctx) => {
     const items = ["Option A", "Option B", "Option C"];
@@ -425,8 +425,8 @@ renderResult(result, options, theme, context) {
 **For Markdown**, use `getMarkdownTheme()`:
 
 ```typescript
-import { getMarkdownTheme } from "@mariozechner/pi-coding-agent";
-import { Markdown } from "@mariozechner/pi-tui";
+import { getMarkdownTheme } from "@zheyihe/ego-coding-agent";
+import { Markdown } from "@zheyihe/ego-tui";
 
 renderResult(result, options, theme, context) {
   const mdTheme = getMarkdownTheme();
@@ -445,10 +445,10 @@ interface MyTheme {
 
 ## Debug logging
 
-Set `PI_TUI_WRITE_LOG` to capture the raw ANSI stream written to stdout.
+Set `EGO_TUI_WRITE_LOG` to capture the raw ANSI stream written to stdout.
 
 ```bash
-PI_TUI_WRITE_LOG=/tmp/tui-ansi.log npx tsx packages/tui/test/chat-simple.ts
+EGO_TUI_WRITE_LOG=/tmp/tui-ansi.log npx tsx packages/tui/test/chat-simple.ts
 ```
 
 ## Performance
@@ -587,14 +587,14 @@ These patterns cover the most common UI needs in extensions. **Copy these patter
 
 ### Pattern 1: Selection Dialog (SelectList)
 
-For letting users pick from a list of options. Use `SelectList` from `@mariozechner/pi-tui` with `DynamicBorder` for framing.
+For letting users pick from a list of options. Use `SelectList` from `@zheyihe/ego-tui` with `DynamicBorder` for framing.
 
 ```typescript
-import type { ExtensionAPI } from "@mariozechner/pi-coding-agent";
-import { DynamicBorder } from "@mariozechner/pi-coding-agent";
-import { Container, type SelectItem, SelectList, Text } from "@mariozechner/pi-tui";
+import type { ExtensionAPI } from "@zheyihe/ego-coding-agent";
+import { DynamicBorder } from "@zheyihe/ego-coding-agent";
+import { Container, type SelectItem, SelectList, Text } from "@zheyihe/ego-tui";
 
-pi.registerCommand("pick", {
+ego.registerCommand("pick", {
   handler: async (_args, ctx) => {
     const items: SelectItem[] = [
       { value: "opt1", label: "Option 1", description: "First option" },
@@ -650,9 +650,9 @@ pi.registerCommand("pick", {
 For operations that take time and should be cancellable. `BorderedLoader` shows a spinner and handles escape to cancel.
 
 ```typescript
-import { BorderedLoader } from "@mariozechner/pi-coding-agent";
+import { BorderedLoader } from "@zheyihe/ego-coding-agent";
 
-pi.registerCommand("fetch", {
+ego.registerCommand("fetch", {
   handler: async (_args, ctx) => {
     const result = await ctx.ui.custom<string | null>((tui, theme, _kb, done) => {
       const loader = new BorderedLoader(tui, theme, "Fetching data...");
@@ -679,13 +679,13 @@ pi.registerCommand("fetch", {
 
 ### Pattern 3: Settings/Toggles (SettingsList)
 
-For toggling multiple settings. Use `SettingsList` from `@mariozechner/pi-tui` with `getSettingsListTheme()`.
+For toggling multiple settings. Use `SettingsList` from `@zheyihe/ego-tui` with `getSettingsListTheme()`.
 
 ```typescript
-import { getSettingsListTheme } from "@mariozechner/pi-coding-agent";
-import { Container, type SettingItem, SettingsList, Text } from "@mariozechner/pi-tui";
+import { getSettingsListTheme } from "@zheyihe/ego-coding-agent";
+import { Container, type SettingItem, SettingsList, Text } from "@zheyihe/ego-tui";
 
-pi.registerCommand("settings", {
+ego.registerCommand("settings", {
   handler: async (_args, ctx) => {
     const items: SettingItem[] = [
       { id: "verbose", label: "Verbose mode", currentValue: "off", values: ["on", "off"] },
@@ -737,7 +737,7 @@ ctx.ui.setStatus("my-ext", undefined);
 
 ### Pattern 4b: Working Indicator Customization
 
-Customize the inline working indicator shown while pi is streaming a response.
+Customize the inline working indicator shown while ego is streaming a response.
 
 ```typescript
 // Static indicator
@@ -757,7 +757,7 @@ ctx.ui.setWorkingIndicator({
 // Hide the indicator entirely
 ctx.ui.setWorkingIndicator({ frames: [] });
 
-// Restore pi's default spinner
+// Restore ego's default spinner
 ctx.ui.setWorkingIndicator();
 ```
 
@@ -822,8 +822,8 @@ Token stats available via `ctx.sessionManager.getBranch()` and `ctx.model`.
 Replace the main input editor with a custom implementation. Useful for modal editing (vim), different keybindings (emacs), or specialized input handling.
 
 ```typescript
-import { CustomEditor, type ExtensionAPI } from "@mariozechner/pi-coding-agent";
-import { matchesKey, truncateToWidth } from "@mariozechner/pi-tui";
+import { CustomEditor, type ExtensionAPI } from "@zheyihe/ego-coding-agent";
+import { matchesKey, truncateToWidth } from "@zheyihe/ego-tui";
 
 type Mode = "normal" | "insert";
 
@@ -874,8 +874,8 @@ class VimEditor extends CustomEditor {
   }
 }
 
-export default function (pi: ExtensionAPI) {
-  pi.on("session_start", (_event, ctx) => {
+export default function (ego: ExtensionAPI) {
+  ego.on("session_start", (_event, ctx) => {
     // Factory receives theme and keybindings from the app
     ctx.ui.setEditorComponent((tui, theme, keybindings) =>
       new VimEditor(theme, keybindings)

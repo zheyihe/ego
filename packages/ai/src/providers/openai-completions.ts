@@ -101,7 +101,7 @@ function resolveCacheRetention(cacheRetention?: CacheRetention): CacheRetention 
 	if (cacheRetention) {
 		return cacheRetention;
 	}
-	if (typeof process !== "undefined" && process.env.PI_CACHE_RETENTION === "long") {
+	if (typeof process !== "undefined" && process.env.EGO_CACHE_RETENTION === "long") {
 		return "long";
 	}
 	return "short";
@@ -963,7 +963,7 @@ function parseChunkUsage(
 	const reportedCachedTokens = rawUsage.prompt_tokens_details?.cached_tokens || 0;
 	const cacheWriteTokens = rawUsage.prompt_tokens_details?.cache_write_tokens || 0;
 
-	// Normalize to pi-ai semantics:
+	// Normalize to ego-ai semantics:
 	// - cacheRead: hits from cache created by previous requests only
 	// - cacheWrite: tokens written to cache in this request
 	// Some OpenAI-compatible providers (observed on OpenRouter) report cached_tokens

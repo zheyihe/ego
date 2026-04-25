@@ -8,14 +8,14 @@
  * Token stats come from ctx.sessionManager/ctx.model (already accessible).
  */
 
-import type { AssistantMessage } from "@mariozechner/pi-ai";
-import type { ExtensionAPI } from "@mariozechner/pi-coding-agent";
-import { truncateToWidth, visibleWidth } from "@mariozechner/pi-tui";
+import type { AssistantMessage } from "@zheyihe/ego-ai";
+import type { ExtensionAPI } from "@zheyihe/ego-coding-agent";
+import { truncateToWidth, visibleWidth } from "@zheyihe/ego-tui";
 
-export default function (pi: ExtensionAPI) {
+export default function (ego: ExtensionAPI) {
 	let enabled = false;
 
-	pi.registerCommand("footer", {
+	ego.registerCommand("footer", {
 		description: "Toggle custom footer",
 		handler: async (_args, ctx) => {
 			enabled = !enabled;

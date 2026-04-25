@@ -1,7 +1,14 @@
 {
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    "noEmit": true
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "noEmit": true,
+    "paths": {
+      "@zheyihe/ego-agent-core": ["../agent/src/index.ts"],
+      "@zheyihe/ego-ai": ["../ai/src/index.ts"],
+      "@zheyihe/ego-ai/*": ["../ai/src/*", "../ai/src/providers/*"],
+      "@zheyihe/ego-tui": ["../tui/src/index.ts"]
+    }
   },
   "include": ["src/**/*"]
 }
